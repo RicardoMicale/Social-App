@@ -1,5 +1,11 @@
-import { CommentTC, LikeTC, PostTC, UserTC } from '../models';
-import { FollowRequestTC } from '../models/FollowRequest';
+import {
+  CommentTC,
+  LikeTC,
+  PostTC,
+  UserTC,
+  FollowRequestTC,
+  TrendTC,
+} from '../models';
 
 const Query = {
   user: UserTC.mongooseResolvers.findOne(),
@@ -12,6 +18,8 @@ const Query = {
   comments: CommentTC.mongooseResolvers.findMany(),
   followRequest: FollowRequestTC.mongooseResolvers.findOne(),
   followRequests: FollowRequestTC.mongooseResolvers.findMany(),
+  trend: TrendTC.mongooseResolvers.findOne(),
+  trends: TrendTC.mongooseResolvers.findMany(),
 };
 
 export default Query;

@@ -12,8 +12,10 @@ export interface UserDocument extends Document {
   updatedAt?: Date;
   active?: Boolean;
   posts?: (Types.ObjectId | PostDocument)[];
+  postCount?: Number;
   followers?: (Types.ObjectId | UserDocument)[];
   follower_count?: Number;
+  photo?: string;
 }
 
 const userSchema = new Schema(
@@ -52,6 +54,19 @@ const userSchema = new Schema(
       },
     ],
     followerCount: {
+      type: Number,
+      default: 0,
+    },
+    photo: {
+      type: String,
+    },
+    posts: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Post',
+      },
+    ],
+    postCount: {
       type: Number,
       default: 0,
     },
