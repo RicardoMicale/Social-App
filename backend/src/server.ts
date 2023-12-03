@@ -26,12 +26,11 @@ async function initServer() {
     const server: ApolloServer = new ApolloServer({
       schema,
       introspection: true,
-      // plugins: [
-      //   process.env.NODE_ENV === 'production'
-      //     ? ApolloServerPluginLandingPageDisabled()
-      //     : ApolloServerPluginLandingPageGraphQLPlayground(),
-      //   new SentryPlugin(),
-      // ],
+      plugins: [
+        process.env.NODE_ENV === 'production'
+          ? ApolloServerPluginLandingPageDisabled()
+          : ApolloServerPluginLandingPageGraphQLPlayground(),
+      ],
       context: ({ req, res }) => ({
         req,
         res,
@@ -43,7 +42,7 @@ async function initServer() {
     server.applyMiddleware({
       app,
       cors: {
-        credentials: true,
+        credentials: false,
         origin: JSON.parse(process?.env?.CORS_ORIGINS ?? '[]'),
       },
     });
