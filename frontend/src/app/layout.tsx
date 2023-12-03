@@ -4,6 +4,7 @@ import './globals.css';
 import Navbar from '@/components/common/Navbar';
 import { UserContextProvider } from '@/context/UserContext.context';
 import { ToastContextProvider } from '@/context/ToastContext.context';
+import { ApolloContextProvider } from '@/context/ApolloContext.context';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -20,14 +21,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <UserContextProvider>
-          <ToastContextProvider>
-            <section>
-              <Navbar />
-              <div>{children}</div>
-            </section>
-          </ToastContextProvider>
-        </UserContextProvider>
+        <ApolloContextProvider>
+          <UserContextProvider>
+            <ToastContextProvider>
+              <div id="toast" className="absolute top-16 right-4" />
+              <section>
+                <Navbar />
+                <div className="bg-neutral-100 min-h-screen px-16">
+                  {children}
+                </div>
+              </section>
+            </ToastContextProvider>
+          </UserContextProvider>
+        </ApolloContextProvider>
       </body>
     </html>
   );

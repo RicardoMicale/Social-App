@@ -10,7 +10,6 @@ interface ToastProps {
 }
 
 export default function Toast({ type, message, onDelete }: ToastProps) {
-  const [visible, setVisible] = React.useState(true);
   const getClass = () => {
     switch (type) {
       case 'success':
@@ -31,7 +30,7 @@ export default function Toast({ type, message, onDelete }: ToastProps) {
       className={`${getClass()} flex items-center justify-between gap-8 max-w-sm px-8 py-3 rounded-md border`}
     >
       <div className="flex flex-col items-start justify-start">
-        <span className="font-semibold">
+        <span className="font-semibold mb-2">
           {`${type?.charAt(0)?.toUpperCase() ?? ''}${type?.slice(1) ?? ''}`}
         </span>
         <span>{message}</span>

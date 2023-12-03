@@ -1,3 +1,4 @@
+import FeedIcon from '@/components/icons/FeedIcon';
 import SearchIcon from '@/components/icons/SearchIcon';
 import UserIcon from '@/components/icons/UserIcon';
 import React from 'react';
@@ -14,7 +15,7 @@ export const routes: IRoute[] = [
     name: 'Feed',
     href: '/',
     as: 'feed',
-    icon: null,
+    icon: <FeedIcon className="w-5 h-5" />,
   },
   {
     name: 'Profile',
@@ -25,7 +26,7 @@ export const routes: IRoute[] = [
   {
     name: 'Search',
     href: '/search',
-    as: 'home',
+    as: 'search',
     icon: <SearchIcon className="w-5 h-5" />,
   },
 ];

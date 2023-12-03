@@ -1,8 +1,9 @@
 'use client';
 
+import React from 'react';
 import Toast from '@/components/common/Toast';
 import { AnimatePresence, motion } from 'framer-motion';
-import React from 'react';
+import ClientOnlyPortal from '@/components/common/ClientOnlyPortal';
 
 interface ToastContextProps {
   children: React.ReactNode;
@@ -34,8 +35,8 @@ export function ToastContextProvider({ children }: ToastContextProps) {
 
   const notify = React.useCallback(
     (
-      content: string,
-      type: 'success' | 'warning' | 'info' | 'error',
+      content?: string,
+      type?: 'success' | 'warning' | 'info' | 'error',
       err?: Error
     ) => {
       if (err) console.log(err.message);
@@ -51,36 +52,42 @@ export function ToastContextProvider({ children }: ToastContextProps) {
     setAlert(undefined);
   };
 
+  // setTimeout(() => {
+  //   onDelete();
+  // }, 6000);
+
   const context = React.useMemo(() => ({ alert, notify }), [alert, notify]);
   return (
     <ToastContext.Provider value={context}>
-      {alert ? (
-        <div
-          className="absolute top-10 right-4 -z-50"
-          style={{
-            zIndex: 200,
-          }}
-        >
-          <AnimatePresence>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.3 }}
-              animate={{ opacity: 1, scale: 1.0 }}
-              exit={{
-                opacity: 0,
-                scale: 0.5,
-                transition: { duration: 0.2 },
-              }}
-              transition={{ type: 'spring', stiffness: 100 }}
-            >
-              <Toast
-                message={alert?.message ?? ''}
-                type={alert?.type ?? null}
-                onDelete={onDelete}
-              />
-            </motion.div>
-          </AnimatePresence>
-        </div>
-      ) : null}
+      <ClientOnlyPortal selector="#toast">
+        {alert ? (
+          <div
+            className="fixed py-4 px-4 md:px-0 w-full lg:w-1/4 right-0 top-10"
+            style={{
+              zIndex: 200,
+            }}
+          >
+            <AnimatePresence>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.3 }}
+                animate={{ opacity: 1, scale: 1.0 }}
+                exit={{
+                  opacity: 0,
+                  scale: 0.5,
+                  transition: { duration: 0.2 },
+                }}
+                transition={{ type: 'spring', stiffness: 100 }}
+              >
+                <Toast
+                  message={alert?.message ?? ''}
+                  type={alert?.type ?? null}
+                  onDelete={onDelete}
+                />
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        ) : null}
+      </ClientOnlyPortal>
       {children}
     </ToastContext.Provider>
   );

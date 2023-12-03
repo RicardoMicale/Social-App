@@ -8,14 +8,12 @@ interface UserContextProps {
   children: React.ReactNode;
 }
 
-export type UserContext = {
+export type TUserContext = {
   user?: User;
   setUser?: React.Dispatch<React.SetStateAction<User>>;
 };
 
-const initialState = {};
-
-const UserContext = React.createContext<UserContext>(initialState);
+export const UserContext = React.createContext<TUserContext>({});
 
 export function UserContextProvider({ children }: UserContextProps) {
   const [user, setUser] = React.useState<User>({});
