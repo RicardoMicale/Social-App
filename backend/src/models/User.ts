@@ -1,5 +1,6 @@
 import { Schema, Document, model, Types } from 'mongoose';
 import { composeMongoose } from 'graphql-compose-mongoose';
+import bcrypt from 'bcryptjs';
 import { PostDocument, PostTC } from '.';
 
 export interface UserDocument extends Document {
@@ -17,6 +18,8 @@ export interface UserDocument extends Document {
   followers?: (Types.ObjectId | UserDocument)[];
   follower_count?: Number;
   photo?: string;
+  token?: string;
+  firebaseId?: string;
 }
 
 const userSchema = new Schema(
@@ -76,9 +79,24 @@ const userSchema = new Schema(
       type: Number,
       default: 0,
     },
+    token: {
+      type: String,
+    },
+    firebaseId: {
+      type: String,
+      unique: true,
+    },
   },
   { timestamps: true }
 );
+
+userSchema.pre('save', async function (this: UserDocument, next) {
+  if (!this.isModified('password')) {
+    return next();
+  }
+  this.password = await bcrypt.hash(this.password, 10);
+  next();
+});
 
 export const User = model<UserDocument>('User', userSchema);
 export const UserTC = composeMongoose(User);
