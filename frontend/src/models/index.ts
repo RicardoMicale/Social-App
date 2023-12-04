@@ -1,4 +1,6 @@
 interface MongooseModel {
+  _id?: string;
+  __typename?: string;
   createdAt?: Date;
   updatedAt?: Date;
   active?: boolean;
@@ -7,7 +9,6 @@ interface MongooseModel {
 export type FollowStatus = 'accepted' | 'rejected' | 'pending';
 
 export interface User extends MongooseModel {
-  _id?: string;
   firstName?: string;
   lastName?: string;
   email?: string;
@@ -21,7 +22,6 @@ export interface User extends MongooseModel {
 }
 
 export interface Post extends MongooseModel {
-  _id: string;
   title?: string;
   body?: string;
   author?: User;
@@ -32,27 +32,23 @@ export interface Post extends MongooseModel {
 }
 
 export interface Comment extends MongooseModel {
-  _id: string;
   body?: string;
   author?: User;
   post?: Post;
 }
 
 export interface Like extends MongooseModel {
-  _id: string;
   post?: Post;
   likedBy?: User;
 }
 
 export interface Trend extends MongooseModel {
-  _id: string;
   hashtag?: string;
   occurrences?: Number;
 }
 
 export interface FollowRequest extends MongooseModel {
-  _id: string;
-  status: FollowStatus;
-  sentBy: User;
-  sentTo: User;
+  status?: FollowStatus;
+  sentBy?: User;
+  sentTo?: User;
 }
