@@ -6,7 +6,8 @@ export interface UserDocument extends Document {
   firstName: string;
   lastName: string;
   email: string;
-  birthDate: Date;
+  username: string;
+  birthDate?: Date;
   password?: string;
   createdAt?: Date;
   updatedAt?: Date;
@@ -36,12 +37,17 @@ const userSchema = new Schema(
       trim: true,
       unique: true,
     },
+    username: {
+      type: String,
+      required: [true, 'Please enter a valid username'],
+      trim: true,
+      unique: true,
+    },
     password: {
       type: String,
     },
     birthDate: {
       type: Date,
-      required: [true, 'Please enter your birth date'],
     },
     active: {
       type: Boolean,
