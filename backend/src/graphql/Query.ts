@@ -10,7 +10,7 @@ import {
 const Query = {
   user: UserTC.mongooseResolvers.findOne(),
   users: UserTC.mongooseResolvers.findMany(),
-  post: PostTC.mongooseResolvers.findOne(),
+  //  post: PostTC.mongooseResolvers.findOne(),
   posts: PostTC.mongooseResolvers.findMany(),
   like: LikeTC.mongooseResolvers.findOne(),
   likes: LikeTC.mongooseResolvers.findMany(),

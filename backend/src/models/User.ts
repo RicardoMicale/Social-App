@@ -24,6 +24,8 @@ export interface UserDocument extends Document {
   follower_count?: Number;
   followRequests?: (Types.ObjectId | FollowRequestDocument)[];
   followRequestsCount?: Number;
+  following?: (Types.ObjectId | UserDocument)[];
+  followingCount?: Number;
   photo?: string;
   token?: string;
   firebaseId?: string;
@@ -103,6 +105,16 @@ const userSchema = new Schema(
       type: String,
       unique: true,
     },
+    following: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
+    followingCount: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );
@@ -142,6 +154,16 @@ UserTC.addRelation('followers', {
   resolver: () => UserTC.mongooseResolvers.dataLoaderMany(),
   prepareArgs: {
     _ids: (source) => source.followers,
+    skip: null,
+    sort: null,
+  },
+  projection: { follower: 1 },
+});
+
+UserTC.addRelation('following', {
+  resolver: () => UserTC.mongooseResolvers.dataLoaderMany(),
+  prepareArgs: {
+    _ids: (source) => source.following,
     skip: null,
     sort: null,
   },
