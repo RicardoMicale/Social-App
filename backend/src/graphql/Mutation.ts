@@ -1,9 +1,16 @@
-import { CommentTC, FollowRequestTC, LikeTC, PostTC, TrendTC, UserTC } from '../models';
+import {
+  CommentTC,
+  FollowRequestTC,
+  LikeTC,
+  PostTC,
+  TrendTC,
+  UserTC,
+} from '../models';
 
 const Mutation = {
   createUser: UserTC.mongooseResolvers.createOne(),
   updateUser: UserTC.mongooseResolvers.updateOne(),
-  createPost: PostTC.mongooseResolvers.createOne(),
+  //  createPost: PostTC.mongooseResolvers.createOne(),
   updatePost: PostTC.mongooseResolvers.updateOne(),
   createComment: CommentTC.mongooseResolvers.createOne(),
   updateComment: CommentTC.mongooseResolvers.updateOne(),
