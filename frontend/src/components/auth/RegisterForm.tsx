@@ -6,6 +6,9 @@ import { useUser } from '@/hooks/useUser';
 import Link from 'next/link';
 import CloseIcon from '../icons/CloseIcon';
 import { ToastContext } from '@/context/ToastContext.context';
+import { useMutation } from '@apollo/client';
+import { SIGN_UP } from '@/graphql/mutations';
+import { useRouter } from 'next/navigation';
 
 export default function RegisterForm() {
   //  STATES
@@ -19,6 +22,10 @@ export default function RegisterForm() {
 
   const [, setUser] = useUser();
   const { notify } = React.useContext(ToastContext);
+  const router = useRouter();
+
+  //  MUTATIONS
+  const [signUp] = useMutation(SIGN_UP);
 
   //  FUNCTIONS
   const validPassword = () => {
@@ -35,18 +42,47 @@ export default function RegisterForm() {
     return _checks;
   };
 
-  const handleRegister = () => {
-    if (checks?.length > 0 || password === '') {
-      if (notify) notify('Invalid password!', 'error');
-      return;
-    }
+  const handleRegister = async () => {
+    try {
+      if (checks?.length > 0 || password === '') {
+        if (notify) notify('Invalid password!', 'error');
+        return;
+      }
 
-    if (password.length > 0 && password !== repeatPassword) {
-      if (notify) notify(`Passwords don't match`, 'error');
-      return;
-    }
+      if (password.length > 0 && password !== repeatPassword) {
+        if (notify) notify(`Passwords don't match`, 'error');
+        return;
+      }
+      console.log('password check passed');
 
-    //  TODO AUTH
+      const newUser = await signUp({
+        variables: {
+          data: {
+            email,
+            password,
+            username,
+            firstName,
+            lastName,
+          },
+        },
+      });
+
+      if (newUser) {
+        if (notify && setUser) {
+          notify('You have been registered', 'success');
+          setUser({ ...newUser?.data?.signUp });
+          console.log(newUser);
+          localStorage.setItem(
+            'firebaseId',
+            newUser?.data?.signUp?.user?.firebaseId
+          );
+        }
+        router.push('/feed');
+      }
+    } catch (err) {
+      console.log(err);
+      if (notify) notify(`Error: ${err}`, 'error');
+    }
   };
 
   //  EFFECT

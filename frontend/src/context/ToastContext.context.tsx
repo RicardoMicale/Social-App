@@ -52,9 +52,9 @@ export function ToastContextProvider({ children }: ToastContextProps) {
     setAlert(undefined);
   };
 
-  // setTimeout(() => {
-  //   onDelete();
-  // }, 6000);
+  setTimeout(() => {
+    onDelete();
+  }, 6000);
 
   const context = React.useMemo(() => ({ alert, notify }), [alert, notify]);
   return (

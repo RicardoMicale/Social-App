@@ -6,6 +6,11 @@ import EyeOffIcon from '../icons/EyeOffIcon';
 import EyeOnIcon from '../icons/EyeOnIcon';
 import { useUser } from '@/hooks/useUser';
 import Link from 'next/link';
+import { useMutation } from '@apollo/client';
+import { SIGN_IN } from '@/graphql/mutations';
+import { ToastContext } from '@/context/ToastContext.context';
+import { useNotify } from '@/hooks/useNotify';
+import { useRouter } from 'next/navigation';
 
 export default function LoginForm() {
   //  STATES
@@ -14,9 +19,40 @@ export default function LoginForm() {
   const [password, setPassword] = React.useState('');
 
   const [, setUser] = useUser();
+  const { notify } = React.useContext(ToastContext);
+
+  const router = useRouter();
+
+  //  MUTATION
+  const [signIn] = useMutation(SIGN_IN);
 
   //  FUNCTIONS
-  const handleLogin = () => {};
+  const handleLogin = async () => {
+    try {
+      const user = await signIn({
+        variables: {
+          data: {
+            email,
+            password,
+          },
+        },
+      });
+
+      if (user?.data) {
+        if (setUser) setUser({ ...user?.data.signIn?.user });
+        if (notify) notify('Logged in successfully', 'success');
+
+        localStorage.setItem(
+          'firebaseId',
+          user?.data?.signIn?.user?.firebaseId
+        );
+        router.push('/feed');
+      }
+    } catch (err) {
+      console.log(err);
+      if (notify) notify(`Error: ${err}`, 'error');
+    }
+  };
 
   //  VARIABLES
   const actions = [

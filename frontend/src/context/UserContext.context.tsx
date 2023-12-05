@@ -2,7 +2,9 @@
 
 import React from 'react';
 import { User } from '../models';
-import { useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { useQuery } from '@apollo/client';
+import { CURRENT_USER } from '@/graphql/queries';
 
 interface UserContextProps {
   children: React.ReactNode;
@@ -16,27 +18,33 @@ export type TUserContext = {
 export const UserContext = React.createContext<TUserContext>({});
 
 export function UserContextProvider({ children }: UserContextProps) {
+  const firebaseId = localStorage.getItem('firebaseId');
+
+  const { loading, data, error } = useQuery<{ me: User }>(CURRENT_USER, {
+    variables: {
+      data: {
+        firebaseId,
+      },
+    },
+  });
   const [user, setUser] = React.useState<User>({});
   // TODO QUERY CURRENT USER
 
-  const router = useParams();
+  const router = useRouter();
 
-  // current user
-  // React.useEffect(
-  //   function syncUserData() {
-  //     if (!userLoading && userData) {
-  //       localStorage.setItem('user', userData?.currentUser?._id);
-  //       setUser(userData?.currentUser);
-  //     } else if (!userData?.currentUser?._id) {
-  //       if (
-  //         localStorage.getItem('login') !== '1' &&
-  //         router.pathname.includes('/app')
-  //       )
-  //         router.push('/login');
-  //     }
-  //   },
-  //   [userData, userLoading]
-  // );
+  //  current user
+  React.useEffect(
+    function syncUserData() {
+      if (!loading && data) {
+        localStorage.setItem('user', data?.me?._id ?? '');
+        setUser(data?.me);
+        console.log(data?.me);
+      } else if (!data?.me?._id) {
+        if (localStorage.getItem('firebaseId') === '') router.push('/login');
+      }
+    },
+    [data, loading]
+  );
 
   const context = React.useMemo(() => ({ user, setUser }), [user, setUser]);
 

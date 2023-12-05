@@ -1,4 +1,4 @@
-const DEV_ENDPOINT = 'http://localhost/7777/graphql';
+const DEV_ENDPOINT = 'http://localhost:7777/graphql';
 const PROD_ENDPOINT = '';
 
 export const ENDPOINT =

@@ -3,14 +3,33 @@
 import React from 'react';
 import { routes } from '../../../routes';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useUser } from '@/hooks/useUser';
 import SignInIcon from '../icons/SignInIcon';
 import EditIcon from '../icons/EditIcon';
+import SignOutIcon from '../icons/SignOutIcon';
+import { useMutation } from '@apollo/client';
+import { SIGN_OUT } from '@/graphql/mutations';
 
 export default function Navbar() {
+  const router = useRouter();
   const pathname = usePathname();
-  const [user] = useUser();
+  const [user, setUser] = useUser();
+
+  const [signOut] = useMutation(SIGN_OUT);
+
+  const logOut = async () => {
+    try {
+      const success = await signOut();
+      if (success) {
+        router.push('/login');
+        localStorage.setItem('firebaseId', '');
+        if (setUser) setUser({});
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div className="w-full flex items-center justify-between px-16 py-6 bg-misc-white">
@@ -51,6 +70,18 @@ export default function Navbar() {
               Register
             </Link>
           </div>
+        )}
+        {user && Object.keys(user).length > 0 && (
+          <button
+            type="button"
+            onClick={() => {
+              logOut();
+            }}
+            className="px-4 py-2 rounded-md flex items-center justify-center gap-2 bg-indigo-600 text-misc-white hover:bg-indigo-500"
+          >
+            <SignOutIcon className="h-5 w-5" />
+            Log out
+          </button>
         )}
       </div>
     </div>
