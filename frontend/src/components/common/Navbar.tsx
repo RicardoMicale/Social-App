@@ -46,7 +46,7 @@ export default function Navbar() {
                 pathname.includes(route.as) ||
                 (pathname === '/' && route.as === 'feed')
                   ? 'bg-indigo-100 text-indigo-700'
-                  : 'text-slate-800 hover:bg-slate-200'
+                  : 'text-slate-800 hover:bg-slate-100'
               } flex items-center justify-center gap-4 py-2.5 px-6 rounded-md`}
             >
               {route.icon}
@@ -57,7 +57,7 @@ export default function Navbar() {
           <div className="flex items-center justify-between gap-4 flex-row md:flex-row ">
             <Link
               href="/login"
-              className="px-4 py-2 rounded-md flex items-center justify-center gap-2 hover:bg-slate-200 text-slate-800"
+              className="px-4 py-2 rounded-md flex items-center justify-center gap-2 hover:bg-slate-100 text-slate-800"
             >
               <SignInIcon className="h-5 w-5" />
               Log in

@@ -18,7 +18,8 @@ export type TUserContext = {
 export const UserContext = React.createContext<TUserContext>({});
 
 export function UserContextProvider({ children }: UserContextProps) {
-  const firebaseId = localStorage.getItem('firebaseId');
+  const firebaseId =
+    typeof window !== 'undefined' ? localStorage.getItem('firebaseId') : '';
 
   const { loading, data, error } = useQuery<{ me: User }>(CURRENT_USER, {
     variables: {
