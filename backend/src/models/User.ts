@@ -1,7 +1,12 @@
 import { Schema, Document, model, Types } from 'mongoose';
 import { composeMongoose } from 'graphql-compose-mongoose';
 import bcrypt from 'bcryptjs';
-import { PostDocument, PostTC } from '.';
+import {
+  FollowRequestDocument,
+  FollowRequestTC,
+  PostDocument,
+  PostTC,
+} from '.';
 
 export interface UserDocument extends Document {
   firstName: string;
@@ -17,6 +22,8 @@ export interface UserDocument extends Document {
   postCount?: Number;
   followers?: (Types.ObjectId | UserDocument)[];
   follower_count?: Number;
+  followRequests?: (Types.ObjectId | FollowRequestDocument)[];
+  followRequestsCount?: Number;
   photo?: string;
   token?: string;
   firebaseId?: string;
@@ -66,6 +73,16 @@ const userSchema = new Schema(
       type: Number,
       default: 0,
     },
+    followRequests: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'FollowRequest',
+      },
+    ],
+    followRequestCount: {
+      type: Number,
+      default: 0,
+    },
     photo: {
       type: String,
     },
@@ -109,4 +126,24 @@ UserTC.addRelation('post', {
     sort: null,
   },
   projection: { post: 1 },
+});
+
+UserTC.addRelation('followRequest', {
+  resolver: () => FollowRequestTC.mongooseResolvers.dataLoaderMany(),
+  prepareArgs: {
+    _ids: (source) => source.followRequests,
+    skip: null,
+    sort: null,
+  },
+  projection: { followRequest: 1 },
+});
+
+UserTC.addRelation('followers', {
+  resolver: () => UserTC.mongooseResolvers.dataLoaderMany(),
+  prepareArgs: {
+    _ids: (source) => source.followers,
+    skip: null,
+    sort: null,
+  },
+  projection: { follower: 1 },
 });

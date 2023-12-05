@@ -24,7 +24,7 @@ export const firebaseCreateUser = async (email: string, password: string) => {
       email,
       password
     );
-    return user.getIdToken();
+    return user.uid;
   } catch (err) {
     console.log(err);
     return null;

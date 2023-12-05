@@ -38,7 +38,8 @@ export const signIn = schemaComposer.createResolver<
     if (!passwordCheck) {
       throw new Error(`Password does not match for email ${email}`);
     }
-    const firebaseId = firebaseSignIn(email, password);
+    const firebaseId = await firebaseSignIn(email, password);
+    user.firebaseId = firebaseId;
     user.save();
 
     context.res.cookie('token', firebaseId, {
@@ -46,7 +47,7 @@ export const signIn = schemaComposer.createResolver<
       sameSite: 'none',
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 365,
-      domain: process.env.NODE_ENV === 'development' ? null : '',
+      domain: process.env.NODE_ENV === 'development' ? 'localhost' : '',
     });
 
     return { user, firebaseId };
@@ -95,6 +96,7 @@ export const signUp = schemaComposer.createResolver<
       firebaseId,
       posts: [],
       followers: [],
+      followRequests: [],
       birthDate: null,
     });
 
@@ -103,7 +105,7 @@ export const signUp = schemaComposer.createResolver<
       sameSite: 'None',
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 365, // 1 yr in ms
-      domain: process.env.NODE_ENV === 'development' ? null : '',
+      domain: process.env.NODE_ENV === 'development' ? 'localhost' : '',
     });
 
     return user;
@@ -122,8 +124,52 @@ export const signOut = schemaComposer.createResolver({
       sameSite: 'None',
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 365, // 1 yr in ms
-      domain: process.env.NODE_ENV === 'development' ? null : '',
+      domain: process.env.NODE_ENV === 'development' ? 'localhost' : '',
     });
     return { success: true };
+  },
+});
+
+type TCurrentUserInput = {
+  firebaseId: string;
+};
+
+const CurrentUserInput = `
+  input CurrentUserInput {
+    firebaseId: String
+  }
+`;
+
+export const me = schemaComposer.createResolver<
+  any,
+  {
+    data: TCurrentUserInput;
+  }
+>({
+  name: 'me',
+  kind: 'query',
+  type: UserTC.getType(),
+  description: 'Gets the user currently logged in',
+  args: {
+    data: CurrentUserInput,
+  },
+  async resolve({ args, context }) {
+    const { firebaseId } = args.data;
+    const token = context?.req?.cookies?.token ?? context?.token ?? null;
+
+    if (!token && !firebaseId) {
+      return null;
+    }
+
+    if (!firebaseId) {
+      return null;
+    }
+
+    const user = await User.findOne({ firebaseId: token ?? firebaseId });
+    if (!user) {
+      throw new Error(`User doesn't exist!`);
+    }
+
+    return user;
   },
 });

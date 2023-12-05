@@ -8,6 +8,8 @@ import {
 } from 'apollo-server-core';
 import app from './app';
 import schema from './graphql/schema';
+import cors from 'cors';
+import bodyParser from 'body-parser';
 
 async function initServer() {
   let connection: typeof mongoose | null = null;
@@ -42,7 +44,7 @@ async function initServer() {
     server.applyMiddleware({
       app,
       cors: {
-        credentials: false,
+        credentials: true,
         origin: JSON.parse(process?.env?.CORS_ORIGINS ?? '[]'),
       },
     });
