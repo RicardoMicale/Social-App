@@ -79,7 +79,7 @@ PostTC.addRelation('user', {
   projection: { user: 1 },
 });
 
-PostTC.addRelation('comment', {
+PostTC.addRelation('comments', {
   resolver: () => CommentTC.mongooseResolvers.dataLoaderMany(),
   prepareArgs: {
     _ids: (source) => source.comments,
@@ -89,7 +89,7 @@ PostTC.addRelation('comment', {
   projection: { comment: 1 },
 });
 
-PostTC.addRelation('like', {
+PostTC.addRelation('likes', {
   resolver: () => LikeTC.mongooseResolvers.dataLoaderMany(),
   prepareArgs: {
     _ids: (source) => source.likes,

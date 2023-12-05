@@ -118,7 +118,7 @@ userSchema.pre('save', async function (this: UserDocument, next) {
 export const User = model<UserDocument>('User', userSchema);
 export const UserTC = composeMongoose(User);
 
-UserTC.addRelation('post', {
+UserTC.addRelation('posts', {
   resolver: () => PostTC.mongooseResolvers.dataLoaderMany(),
   prepareArgs: {
     _ids: (source) => source.posts,
@@ -128,7 +128,7 @@ UserTC.addRelation('post', {
   projection: { post: 1 },
 });
 
-UserTC.addRelation('followRequest', {
+UserTC.addRelation('followRequests', {
   resolver: () => FollowRequestTC.mongooseResolvers.dataLoaderMany(),
   prepareArgs: {
     _ids: (source) => source.followRequests,

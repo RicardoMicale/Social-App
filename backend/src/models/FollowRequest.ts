@@ -41,7 +41,7 @@ export const FollowRequest = model<FollowRequestDocument>(
 );
 export const FollowRequestTC = composeMongoose(FollowRequest);
 
-FollowRequestTC.addRelation('user', {
+FollowRequestTC.addRelation('sentBy', {
   resolver: () => UserTC.mongooseResolvers.dataLoader(),
   prepareArgs: {
     _id: (source) => source.sentBy,
@@ -51,7 +51,7 @@ FollowRequestTC.addRelation('user', {
   projection: { user: 1 },
 });
 
-FollowRequestTC.addRelation('user', {
+FollowRequestTC.addRelation('sentTo', {
   resolver: () => UserTC.mongooseResolvers.dataLoader(),
   prepareArgs: {
     _id: (source) => source.sentTo,
