@@ -146,7 +146,7 @@ export const getFeed = schemaComposer.createResolver<
       throw new Error(`User doesn't exist`);
     }
 
-    
+    //  TODO FEED POSTS LOGIC
 
   },
 });

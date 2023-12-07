@@ -21,7 +21,7 @@ export interface UserDocument extends Document {
   posts?: (Types.ObjectId | PostDocument)[];
   postCount?: Number;
   followers?: (Types.ObjectId | UserDocument)[];
-  follower_count?: Number;
+  followerCount?: Number;
   followRequests?: (Types.ObjectId | FollowRequestDocument)[];
   followRequestsCount?: Number;
   following?: (Types.ObjectId | UserDocument)[];

@@ -16,8 +16,8 @@ const Mutation = {
   updateComment: CommentTC.mongooseResolvers.updateOne(),
   createLike: LikeTC.mongooseResolvers.createOne(),
   updateLike: LikeTC.mongooseResolvers.updateOne(),
-  createFollowRequest: FollowRequestTC.mongooseResolvers.createOne(),
-  updateFollowRequest: FollowRequestTC.mongooseResolvers.updateOne(),
+  //  createFollowRequest: FollowRequestTC.mongooseResolvers.createOne(),
+  //  updateFollowRequest: FollowRequestTC.mongooseResolvers.updateOne(),
   createTrend: TrendTC.mongooseResolvers.createOne(),
   updateTrend: TrendTC.mongooseResolvers.updateOne(),
 };
