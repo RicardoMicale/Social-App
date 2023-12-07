@@ -25,9 +25,10 @@ export const POST_FRAGMENT = gql`
     title
     body
     author
-    comments
+    comments {
+      body
+    }
     commentCount
-    likes
     likeCount
   }
 `;

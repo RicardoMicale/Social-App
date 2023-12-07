@@ -17,6 +17,7 @@ export default function LoginForm() {
   const [showPassword, setShowPassword] = React.useState(false);
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [clickable, setClickable] = React.useState(true);
 
   const [, setUser] = useUser();
   const { notify } = React.useContext(ToastContext);
@@ -29,6 +30,12 @@ export default function LoginForm() {
   //  FUNCTIONS
   const handleLogin = async () => {
     try {
+      //  prevents double clicks
+      if (!clickable) {
+        return;
+      }
+      setClickable(false);
+
       const user = await signIn({
         variables: {
           data: {
@@ -51,6 +58,8 @@ export default function LoginForm() {
     } catch (err) {
       console.log(err);
       if (notify) notify(`Error: ${err}`, 'error');
+    } finally {
+      setClickable(true);
     }
   };
 
@@ -73,6 +82,7 @@ export default function LoginForm() {
               type="email"
               placeholder="Enter your email here..."
               name="email"
+              id="email"
               className="bg-slate-100 px-4 py-2 rounded-md w-full border-[1px] border-slate-200 text-sm"
               onChange={(e) => {
                 setEmail(e.target.value);
@@ -88,6 +98,7 @@ export default function LoginForm() {
                 type={showPassword ? 'text' : 'password'}
                 placeholder="********"
                 name="password"
+                id="password"
                 className="bg-slate-100 px-4 py-2 rounded-md w-full border-[1px] border-slate-200 text-sm"
                 onChange={(e) => {
                   setPassword(e.target.value);

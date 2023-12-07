@@ -18,6 +18,7 @@ export default function RegisterForm() {
   const [lastName, setLastName] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [repeatPassword, setRepeatPassword] = React.useState('');
+  const [clickable, setClickable] = React.useState(true);
   const checks: string[] = [];
 
   const [, setUser] = useUser();
@@ -53,7 +54,12 @@ export default function RegisterForm() {
         if (notify) notify(`Passwords don't match`, 'error');
         return;
       }
-      console.log('password check passed');
+
+      //  prevents double clicks
+      if (!clickable) {
+        return;
+      }
+      setClickable(false);
 
       const newUser = await signUp({
         variables: {
@@ -82,6 +88,8 @@ export default function RegisterForm() {
     } catch (err) {
       console.log(err);
       if (notify) notify(`Error: ${err}`, 'error');
+    } finally {
+      setClickable(true);
     }
   };
 
@@ -109,6 +117,7 @@ export default function RegisterForm() {
               type="email"
               placeholder="Enter your email here..."
               name="email"
+              id="email"
               className="bg-slate-100 px-4 py-2 rounded-md w-full border-[1px] border-slate-200 text-sm"
               onChange={(e) => {
                 setEmail(e.target.value);
@@ -128,6 +137,7 @@ export default function RegisterForm() {
                 type="text"
                 placeholder="Enter your name here..."
                 name="firstName"
+                id="firstName"
                 className="bg-slate-100 px-4 py-2 rounded-md w-full border-[1px] border-slate-200 text-sm"
                 onChange={(e) => {
                   setFirstName(e.target.value);
@@ -142,6 +152,7 @@ export default function RegisterForm() {
                 type="text"
                 placeholder="Enter your last name here..."
                 name="lastName"
+                id="lastName"
                 className="bg-slate-100 px-4 py-2 rounded-md w-full border-[1px] border-slate-200 text-sm"
                 onChange={(e) => {
                   setLastName(e.target.value);
@@ -158,6 +169,7 @@ export default function RegisterForm() {
               type="text"
               placeholder="Enter your username here..."
               name="username"
+              id="username"
               className="bg-slate-100 px-4 py-2 rounded-md w-full border-[1px] border-slate-200 text-sm"
               onChange={(e) => {
                 setUsername(e.target.value);
@@ -173,6 +185,7 @@ export default function RegisterForm() {
               type="password"
               placeholder="********"
               name="password"
+              id="password"
               className="bg-slate-100 px-4 py-2 rounded-md w-full border-[1px] border-slate-200 text-sm"
               onChange={(e) => {
                 setPassword(e.target.value);
@@ -201,6 +214,7 @@ export default function RegisterForm() {
               type="password"
               placeholder="********"
               name="password2"
+              id="password2"
               className="bg-slate-100 px-4 py-2 rounded-md w-full border-[1px] border-slate-200 text-sm"
               onChange={(e) => {
                 setRepeatPassword(e.target.value);

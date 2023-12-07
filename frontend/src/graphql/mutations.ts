@@ -38,3 +38,18 @@ export const SIGN_OUT = gql`
     }
   }
 `;
+
+//  POSTS
+
+export const CREATE_POST = gql`
+  mutation CREATE_POST($data: CreatePostInput) {
+    createPost(data: $data) {
+      _id
+      title
+      body
+      commentCount
+      likeCount
+      createdAt
+    }
+  }
+`;

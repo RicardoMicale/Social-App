@@ -12,6 +12,7 @@ export interface User extends MongooseModel {
   firstName?: string;
   lastName?: string;
   email?: string;
+  username?: string;
   birthDate?: Date;
   password?: string;
   posts?: Post[];
@@ -21,6 +22,8 @@ export interface User extends MongooseModel {
   followRequestCount?: Number;
   follower_count?: Number;
   photo?: string;
+  following?: User;
+  followingCount?: Number;
 }
 
 export interface Post extends MongooseModel {
