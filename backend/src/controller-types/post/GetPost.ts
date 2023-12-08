@@ -1,4 +1,4 @@
-import { Post, PostDocument, PostTC, UserTC } from '../../models';
+import { PostTC, UserTC } from '../../models';
 
 //  POSTS BY AUTHOR ID
 

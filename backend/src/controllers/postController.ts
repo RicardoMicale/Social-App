@@ -19,8 +19,12 @@ import {
   User,
   UserTC,
   UserDocument,
+  LikeTC,
 } from '../models';
 import { schemaComposer } from 'graphql-compose';
+import { GetPostLikesType } from '../controller-types/like/GetLikes';
+import { TGetPostLikesInput } from '../controller-types/like/GetLikes';
+import { GetPostLikesInput } from '../controller-types/like/GetLikes';
 
 export const createPost = schemaComposer.createResolver<
   any,
@@ -138,6 +142,32 @@ export const getPost = schemaComposer.createResolver<
     }
 
     return post;
+  },
+});
+
+export const getPostLikes = schemaComposer.createResolver<
+  any,
+  {
+    data: TGetPostLikesInput;
+  }
+>({
+  name: 'getPostLikes',
+  kind: 'query',
+  description: 'Gets the likes of a post',
+  type: GetPostLikesType,
+  args: {
+    data: GetPostLikesInput,
+  },
+  async resolve({ args }) {
+    const { postId } = args?.data;
+
+    const post = await Post.findById(postId).populate('likes');
+
+    if (!post) {
+      throw new Error('Post not found');
+    }
+
+    return { likes: post.likes, likeCount: post.likeCount }
   },
 });
 
