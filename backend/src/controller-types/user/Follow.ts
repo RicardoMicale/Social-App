@@ -38,14 +38,14 @@ export type TGetFollowersInput = {
 
 export const GetFollowersInput = `
   input GetFollowersInput {
-    userId: String;
+    userId: String!
   }
 `;
 
 export const GetFollowersType = `
   type getFollowersType {
     followers: [${UserTC.getTypeName()}]
-    followerCount: Number
+    followerCount: Int
   }
 `;
 
@@ -62,8 +62,8 @@ export const GetFollowingInput = `
 `;
 
 export const GetFollowingType = `
-  type getFollowersType {
+  type getFollowingType {
     following: [${UserTC.getTypeName()}]
-    followingCount: Number
+    followingCount: Int
   }
 `;

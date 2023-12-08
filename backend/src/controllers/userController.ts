@@ -53,6 +53,7 @@ export const followUser = schemaComposer.createResolver<
       ...userReceiver.followRequests,
       newFollowRequest,
     ];
+    userReceiver.followRequestCount = userReceiver.followRequestCount + 1;
     userReceiver.save();
 
     return newFollowRequest;
@@ -65,9 +66,9 @@ export const modifyFollowRequest = schemaComposer.createResolver<
     data: TModifyRequestInput;
   }
 >({
-  name: 'acceptRequest',
+  name: 'modifyRequest',
   kind: 'mutation',
-  description: 'Accepts user follow request',
+  description: 'Accepts or rejects user follow request',
   type: FollowRequestTC.getType(),
   args: {
     data: ModifyRequestInput,
@@ -82,6 +83,7 @@ export const modifyFollowRequest = schemaComposer.createResolver<
     }
 
     const receiver = await User.findById(followRequest.sentTo);
+    const sender = await User.findById(followRequest.sentBy);
 
     if (!receiver) {
       throw new Error(`User receiving doesn't exist`);
@@ -96,6 +98,15 @@ export const modifyFollowRequest = schemaComposer.createResolver<
     receiver.followRequests = receiver.followRequests.filter((fr) => {
       fr._id !== followRequest._id;
     });
+
+    if (status === 'accepted') {
+      //  if the request is accepted, add the user to the receivers follower list and update the follower count
+      receiver.followers = [...receiver.followers, sender._id];
+      receiver.followerCount = receiver.followerCount + 1;
+      // adds the user to the sender following list and updates the following count
+      sender.following = [...sender.following, receiver._id];
+      sender.followingCount = sender.followingCount + 1;
+    }
     receiver.save();
 
     return followRequest;
@@ -115,7 +126,7 @@ const GetFollowRequestsInput = `
 const GetFollowRequestsType = `
   type GetFollowRequestsType {
     followRequests: [${FollowRequestTC.getType()}]
-    followRequestsCount: Number
+    followRequestsCount: Int
   }
 `;
 
@@ -143,7 +154,7 @@ export const getFollowRequests = schemaComposer.createResolver<
 
     return {
       followRequests: user.followRequests,
-      followRequestsCount: user.followRequestsCount,
+      followRequestsCount: user.followRequestCount,
     };
   },
 });

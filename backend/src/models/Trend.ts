@@ -3,7 +3,7 @@ import { composeMongoose } from 'graphql-compose-mongoose';
 
 interface TrendDocument extends Document {
   hashtag: string;
-  occurrences: Number;
+  occurrences: number;
   createdAt?: Date;
   updatedAt?: Date;
   active?: Boolean;

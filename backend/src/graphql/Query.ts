@@ -11,7 +11,7 @@ const Query = {
   //  user: UserTC.mongooseResolvers.findOne(),
   users: UserTC.mongooseResolvers.findMany(),
   //  post: PostTC.mongooseResolvers.findOne(),
-  posts: PostTC.mongooseResolvers.findMany(),
+  //  posts: PostTC.mongooseResolvers.findMany(),
   like: LikeTC.mongooseResolvers.findOne(),
   likes: LikeTC.mongooseResolvers.findMany(),
   comment: CommentTC.mongooseResolvers.findOne(),

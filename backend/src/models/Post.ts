@@ -14,9 +14,9 @@ export interface PostDocument extends Document {
   body: string;
   author: Types.ObjectId | UserDocument;
   comments?: (Types.ObjectId | CommentDocument)[];
-  commentCount?: Number;
+  commentCount?: number;
   likes?: (Types.ObjectId | LikeDocument)[];
-  likeCount?: Number;
+  likeCount?: number;
   createdAt?: Date;
   updatedAt?: Date;
   active?: Boolean;

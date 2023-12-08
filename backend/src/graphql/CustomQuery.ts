@@ -5,7 +5,7 @@ import {
   getFollowRequests,
 } from '../controllers/userController';
 import { me } from '../controllers/authController';
-import { getUserPosts, getPost } from '../controllers/postController';
+import { getUserPosts, getPost, getPosts } from '../controllers/postController';
 
 export default {
   me,
@@ -15,4 +15,5 @@ export default {
   getFollowers,
   getFollowing,
   getFollowRequests,
+  getPosts,
 };

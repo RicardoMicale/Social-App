@@ -19,13 +19,13 @@ export interface UserDocument extends Document {
   updatedAt?: Date;
   active?: Boolean;
   posts?: (Types.ObjectId | PostDocument)[];
-  postCount?: Number;
+  postCount?: number;
   followers?: (Types.ObjectId | UserDocument)[];
-  followerCount?: Number;
+  followerCount?: number;
   followRequests?: (Types.ObjectId | FollowRequestDocument)[];
-  followRequestsCount?: Number;
+  followRequestCount?: number;
   following?: (Types.ObjectId | UserDocument)[];
-  followingCount?: Number;
+  followingCount?: number;
   photo?: string;
   token?: string;
   firebaseId?: string;
