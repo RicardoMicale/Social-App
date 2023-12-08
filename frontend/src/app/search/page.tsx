@@ -1,9 +1,10 @@
+import Search from '@/components/search/Search';
 import React from 'react';
 
 export default function SearchPage() {
   return (
     <div>
-      <span>search</span>
+      <Search />
     </div>
   );
 }
