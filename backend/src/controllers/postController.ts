@@ -61,13 +61,30 @@ export const createPost = schemaComposer.createResolver<
 
     //  adds the new post id to users posts
     user.posts = [...user.posts, post._id];
+    user.postCount = user.postCount + 1;
     await user.save();
 
     return post;
   },
 });
 
-//  getFeed
+const GetPostsType = `
+  type GetPostsType {
+    posts: [${PostTC.getType()}]
+  }
+`;
+
+export const getPosts = schemaComposer.createResolver({
+  name: 'getPosts',
+  kind: 'query',
+  description: 'Gets all posts',
+  type: GetPostsType,
+  async resolve() {
+    const posts = await Post.find().populate('author');
+
+    return { posts };
+  },
+});
 
 export const getUserPosts = schemaComposer.createResolver<
   any,
@@ -147,6 +164,5 @@ export const getFeed = schemaComposer.createResolver<
     }
 
     //  TODO FEED POSTS LOGIC
-
   },
 });
