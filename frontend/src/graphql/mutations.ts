@@ -53,3 +53,31 @@ export const CREATE_POST = gql`
     }
   }
 `;
+
+//  USER
+
+export const FOLLOW_USER = gql`
+  mutation FOLLOW_USER($data: FollowUserInput) {
+    followUser(data: $data) {
+      status
+    }
+  }
+`;
+
+export const MODIFY_FOLLOW_REQUEST = gql`
+  mutation MODIFY_FOLLOW_REQUEST($data: ModifyRequestInput) {
+    modifyFollowRequest(data: $data) {
+      sentBy {
+        _id
+        firstName
+        lastName
+      }
+      sentTo {
+        _id
+        firstName
+        lastName
+      }
+      status
+    }
+  }
+`;

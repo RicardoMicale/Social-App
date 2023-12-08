@@ -20,9 +20,9 @@ export interface User extends MongooseModel {
   followers?: User[];
   followRequests?: FollowRequest[];
   followRequestCount?: Number;
-  follower_count?: Number;
+  followerCount?: Number;
   photo?: string;
-  following?: User;
+  following?: User[];
   followingCount?: Number;
 }
 

@@ -10,11 +10,12 @@ export const USER_FRAGMENT = gql`
     lastName
     email
     birthDate
-    password
     postCount
     followerCount
     followRequestCount
+    followingCount
     photo
+    username
   }
 `;
 

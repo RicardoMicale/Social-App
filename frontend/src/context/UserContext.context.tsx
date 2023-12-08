@@ -39,7 +39,7 @@ export function UserContextProvider({ children }: UserContextProps) {
       if (!loading && data) {
         localStorage.setItem('user', data?.me?._id ?? '');
         setUser(data?.me);
-        console.log(data?.me);
+        // console.log(data?.me);
       } else if (!data?.me?._id) {
         if (localStorage.getItem('firebaseId') === '') router.push('/login');
       }
