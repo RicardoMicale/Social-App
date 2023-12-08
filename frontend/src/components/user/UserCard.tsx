@@ -9,6 +9,7 @@ import AddIcon from '../icons/AddIcon';
 import { useMutation } from '@apollo/client';
 import { FOLLOW_USER } from '@/graphql/mutations';
 import { ToastContext } from '@/context/ToastContext.context';
+import Link from 'next/link';
 
 interface UserCardProps {
   currentUser: User;
@@ -141,18 +142,18 @@ export default function UserCard({ currentUser }: UserCardProps) {
           )}
         </div>
         <section className="mt-4 flex flex-wrap items-start justify-start gap-x-4 gap-y-2">
-          <div>
+          <Link href={`/followers/${currentUser?._id ?? ''}`}>
             <span className="font-bold text-slate-800">
               {String(currentUser?.followerCount ?? '')}
             </span>{' '}
             <span className="text-slate-500 text-sm">Followers</span>
-          </div>
-          <div>
+          </Link>
+          <Link href={`/following/${currentUser?._id ?? ''}`}>
             <span className="font-bold text-slate-800">
               {String(currentUser?.followingCount ?? '')}
             </span>{' '}
             <span className="text-slate-500 text-sm">Following</span>
-          </div>
+          </Link>
           <div>
             <span className="font-bold text-slate-800">
               {String(currentUser?.postCount ?? '')}
