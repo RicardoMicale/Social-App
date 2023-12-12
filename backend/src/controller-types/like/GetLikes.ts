@@ -1,11 +1,11 @@
 import { LikeTC } from '../../models';
 
 export type TGetPostLikesInput = {
-  postId: String;
+  postId: string;
 };
 
 export const GetPostLikesInput = `
-  input GetPostLikes {
+  input GetPostLikesInput {
     postId: String!
   }
 `;
@@ -13,6 +13,6 @@ export const GetPostLikesInput = `
 export const GetPostLikesType = `
   type GetPostLikesType {
     likes: [${LikeTC.getTypeName()}]
-    likeCount: number
+    likeCount: Int
   }
 `;

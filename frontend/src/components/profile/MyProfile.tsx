@@ -10,6 +10,7 @@ import AddIcon from '../icons/AddIcon';
 import PostItem from '../post/PostItem';
 import Link from 'next/link';
 import RequestIcon from '../icons/RequestIcon';
+import Loading from '../common/Loading';
 
 export default function MyProfile() {
   //  STATES
@@ -33,6 +34,8 @@ export default function MyProfile() {
       setPosts([...data?.getUserPosts?.posts]);
     }
   }, [data, loading]);
+
+  if (loading) return <Loading />;
 
   return (
     <div className="w-full py-16 flex flex-col md:flex-row items-start-justify-start gap-16">

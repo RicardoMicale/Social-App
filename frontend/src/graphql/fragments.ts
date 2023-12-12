@@ -25,10 +25,6 @@ export const POST_FRAGMENT = gql`
     createdAt
     title
     body
-    author
-    comments {
-      body
-    }
     commentCount
     likeCount
   }

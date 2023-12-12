@@ -6,6 +6,7 @@ import { FollowRequest } from '@/models';
 import { useQuery } from '@apollo/client';
 import React from 'react';
 import RequestItem from './RequestItem';
+import Loading from '../common/Loading';
 
 export default function MyRequests() {
   const [user] = useUser();
@@ -34,6 +35,8 @@ export default function MyRequests() {
       setRequestCount(data?.getFollowRequests?.followRequestsCount ?? 0);
     }
   }, [data, loading]);
+
+  if (loading) return <Loading />;
 
   return (
     <div className="py-16">

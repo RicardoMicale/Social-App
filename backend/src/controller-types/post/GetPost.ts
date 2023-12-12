@@ -1,4 +1,4 @@
-import { PostTC, UserTC } from '../../models';
+import { CommentTC, LikeTC, Post, PostTC, UserTC } from '../../models';
 
 //  POSTS BY AUTHOR ID
 
@@ -31,6 +31,15 @@ export const GetPostInput = `
   }
 `;
 
+export const GetPostType = `
+  type GetPostType {
+    post: ${PostTC.getTypeName()}
+    user: ${UserTC.getTypeName()}
+    comments: [${CommentTC.getTypeName()}]
+    likes: [${LikeTC.getTypeName()}]
+  }
+`;
+
 //  FEED POSTS
 
 export type TGetFeedInput = {
@@ -45,6 +54,11 @@ export const GetFeedInput = `
 
 export const GetFeedType = `
   type GetFeedType {
-    feed: [${PostTC.getTypeName()}]
+    feed: [FeedType]
+  }
+  type FeedType {
+    post: ${PostTC.getTypeName()}
+    user: ${UserTC.getTypeName()}
+    isLiked: Boolean
   }
 `;

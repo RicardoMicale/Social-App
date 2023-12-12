@@ -16,14 +16,14 @@ export interface User extends MongooseModel {
   birthDate?: Date;
   password?: string;
   posts?: Post[];
-  postCount?: Number;
+  postCount?: number;
   followers?: User[];
   followRequests?: FollowRequest[];
-  followRequestCount?: Number;
-  followerCount?: Number;
+  followRequestCount?: number;
+  followerCount?: number;
   photo?: string;
   following?: User[];
-  followingCount?: Number;
+  followingCount?: number;
 }
 
 export interface Post extends MongooseModel {
@@ -31,9 +31,9 @@ export interface Post extends MongooseModel {
   body?: string;
   author?: User;
   comments?: Comment[];
-  commentCount?: Number;
+  commentCount?: number;
   likes?: Like[];
-  likeCount?: Number;
+  likeCount?: number;
 }
 
 export interface Comment extends MongooseModel {
@@ -49,7 +49,7 @@ export interface Like extends MongooseModel {
 
 export interface Trend extends MongooseModel {
   hashtag?: string;
-  occurrences?: Number;
+  occurrences?: number;
 }
 
 export interface FollowRequest extends MongooseModel {

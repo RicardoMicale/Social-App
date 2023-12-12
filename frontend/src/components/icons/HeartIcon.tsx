@@ -1,6 +1,9 @@
 import React from 'react';
 
-function HeartIcon({ className, ...props }: React.SVGProps<SVGSVGElement>) {
+function HeartIcon(
+  { className, ...props }: React.SVGProps<SVGSVGElement>,
+  { fill }: React.SVGProps<SVGPathElement>
+) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -11,6 +14,7 @@ function HeartIcon({ className, ...props }: React.SVGProps<SVGSVGElement>) {
     >
       <path
         stroke="currentColor"
+        fill={fill}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="2"

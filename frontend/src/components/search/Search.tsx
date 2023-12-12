@@ -8,6 +8,7 @@ import { useQuery } from '@apollo/client';
 import { GET_POSTS, GET_USERS } from '@/graphql/queries';
 import { filterPosts, filterUser } from '@/lib/filters';
 import UserSearchCard from './UserSearchCard';
+import Loading from '../common/Loading';
 
 export default function Search() {
   //  STATES
@@ -33,6 +34,8 @@ export default function Search() {
   const searchUsers = () => {
     setUsers([...filterUser(userSearch, usersData?.users ?? [])]);
   };
+
+  if (usersLoading && postsLoading) return <Loading />;
 
   return (
     <div className="py-8">

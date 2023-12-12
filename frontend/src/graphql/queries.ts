@@ -32,6 +32,28 @@ export const GET_USERS = gql`
 
 //  POSTS
 
+export const GET_FEED = gql`
+  query GET_FEED($data: GetFeedInput) {
+    getFeed(data: $data) {
+      feed {
+        post {
+          _id
+          createdAt
+          title
+          body
+          commentCount
+          likeCount
+        }
+        user {
+          ...UserFragment
+        }
+        isLiked
+      }
+    }
+  }
+  ${USER_FRAGMENT}
+`;
+
 export const GET_USER_POSTS = gql`
   query GET_USER_POSTS($data: GetUserPostsInput) {
     getUserPosts(data: $data) {
@@ -72,6 +94,75 @@ export const GET_POSTS = gql`
     }
   }
   ${POST_FRAGMENT}
+`;
+
+export const GET_POST = gql`
+  query GET_POST($data: GetPostInput) {
+    getPost(data: $data) {
+      post {
+        ...PostFragment
+      }
+      user {
+        username
+        _id
+        firstName
+        lastName
+        photo
+        email
+      }
+      comments {
+        body
+        author {
+          username
+          _id
+          firstName
+          lastName
+          email
+          photo
+          following {
+            _id
+          }
+          followers {
+            _id
+          }
+        }
+      }
+      likes {
+        likedBy {
+          username
+          _id
+          firstName
+          lastName
+          email
+          photo
+          following {
+            _id
+          }
+          followers {
+            _id
+          }
+        }
+      }
+    }
+  }
+  ${POST_FRAGMENT}
+`;
+
+export const GET_POST_LIKES = gql`
+  query GET_POST_LIKES($data: GetPostLikesInput) {
+    getPostLikes(data: $data) {
+      likeCount
+      likes {
+        likedBy {
+          username
+          firstName
+          lastName
+          _id
+          photo
+        }
+      }
+    }
+  }
 `;
 
 //  REQUESTS

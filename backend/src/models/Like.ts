@@ -23,7 +23,7 @@ const likeSchema = new Schema(
     active: {
       type: Boolean,
       default: true,
-    }
+    },
   },
   { timestamps: true }
 );
@@ -41,7 +41,7 @@ LikeTC.addRelation('post', {
   projection: { post: 1 },
 });
 
-LikeTC.addRelation('user', {
+LikeTC.addRelation('likedBy', {
   resolver: () => UserTC.mongooseResolvers.dataLoader(),
   prepareArgs: {
     _id: (source) => source.likedBy,

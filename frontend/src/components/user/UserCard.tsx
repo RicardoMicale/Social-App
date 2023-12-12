@@ -60,17 +60,14 @@ export default function UserCard({ currentUser }: UserCardProps) {
     //  if this is my profile, return false
     if (currentUser?._id === user?._id) return false;
     //  if this user does not have followers, return false
-    if (currentUser?.followers?.length === 0) return false;
+    if (currentUser?.following?.length === 0) return false;
 
     // if the logged user is not in the followers list, return false
-    const follower = currentUser?.followers?.reduce((acc, u) => {
-      if (u?._id === user?._id) return true;
-      return false;
+    const myFollower = currentUser?.following?.reduce((acc, u) => {
+      return u?._id === user?._id;
     }, false);
 
-    if (!follower) return false;
-
-    return true;
+    return myFollower;
   };
 
   const imFollowing = () => {
@@ -78,17 +75,14 @@ export default function UserCard({ currentUser }: UserCardProps) {
     //  if this is my profile, return false
     if (currentUser?._id === user?._id) return false;
     //  if this user is not following, return false
-    if (currentUser?.following?.length === 0) return false;
+    if (currentUser?.followers?.length === 0) return false;
 
     //  if the logged user is not in the following of the users profile, return false
-    const following = currentUser?.following?.reduce((acc, u) => {
-      if (u?._id === user?._id) return true;
-      return false;
+    const imFollowing = currentUser?.followers?.reduce((acc, u) => {
+      return u?._id === user?._id;
     }, false);
 
-    if (!following) return false;
-
-    return true;
+    return imFollowing;
   };
 
   const hasRequest = () => {
@@ -133,6 +127,11 @@ export default function UserCard({ currentUser }: UserCardProps) {
           {followsMe() && !imFollowing() && (
             <span className="bg-slate-200 text-slate-700 rounded-sm text-xs px-2 py-1">
               Follows you
+            </span>
+          )}
+          {!followsMe() && imFollowing() && (
+            <span className="bg-slate-200 text-slate-700 rounded-sm text-xs px-2 py-1">
+              Following
             </span>
           )}
           {followsMe() && imFollowing() && (

@@ -37,7 +37,7 @@ const commentSchema = new Schema(
 export const Comment = model<CommentDocument>('Comment', commentSchema);
 export const CommentTC = composeMongoose(Comment);
 
-CommentTC.addRelation('user', {
+CommentTC.addRelation('author', {
   resolver: () => UserTC.mongooseResolvers.dataLoader(),
   prepareArgs: {
     _id: (source) => source.author,

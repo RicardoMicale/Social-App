@@ -2,6 +2,7 @@ import {
   GetFeedInput,
   GetFeedType,
   GetPostInput,
+  GetPostType,
   GetUserPostsInput,
   GetUserPostsType,
   TGetFeedInput,
@@ -12,19 +13,12 @@ import {
   CreatePostInput,
   TCreatePostInput,
 } from '../controller-types/post/CreatePost';
-import {
-  Post,
-  PostTC,
-  PostDocument,
-  User,
-  UserTC,
-  UserDocument,
-  LikeTC,
-} from '../models';
+import { Post, PostTC, User, Like, Comment } from '../models';
 import { schemaComposer } from 'graphql-compose';
 import { GetPostLikesType } from '../controller-types/like/GetLikes';
 import { TGetPostLikesInput } from '../controller-types/like/GetLikes';
 import { GetPostLikesInput } from '../controller-types/like/GetLikes';
+import { Types } from 'mongoose';
 
 export const createPost = schemaComposer.createResolver<
   any,
@@ -127,21 +121,77 @@ export const getPost = schemaComposer.createResolver<
   name: 'getPost',
   kind: 'query',
   description: 'Gets a post from its id',
-  type: PostTC.getType(),
+  type: GetPostType,
   args: {
     data: GetPostInput,
   },
   async resolve({ args }) {
     //  gets the post with its author and comments as objects instead of MongoIDs
-    const post = await Post.findById(args?.data?.post)
-      .populate('comments')
-      .populate('author');
+    const postId = args?.data?.post?.toString();
+
+    const [post] = await Post.aggregate([
+      {
+        $match: { _id: new Types.ObjectId(postId) },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'author',
+          foreignField: '_id',
+          as: 'author',
+        },
+      },
+      { $unwind: '$author' },
+      {
+        $lookup: {
+          from: 'comments',
+          localField: 'comments',
+          foreignField: '_id',
+          as: 'comments',
+          // pipeline: [
+          //   {
+          //     $lookup: {
+          //       from: 'user',
+          //       localField: 'comments.author',
+          //       foreignField: '_id',
+          //       as: 'author',
+          //     },
+          //   },
+          //   { $unwind: '$author' },
+          // ],
+        },
+      },
+      {
+        $lookup: {
+          from: 'likes',
+          localField: 'likes',
+          foreignField: '_id',
+          as: 'likes',
+          // pipeline: [
+          //   {
+          //     $lookup: {
+          //       from: 'user',
+          //       localField: 'likes.likedBy',
+          //       foreignField: '_id',
+          //       as: 'likedBy',
+          //     },
+          //   },
+          //   { $unwind: '$author' },
+          // ],
+        },
+      },
+    ]);
 
     if (!post) {
       throw new Error('Post not found');
     }
 
-    return post;
+    return {
+      post,
+      user: post.author,
+      comments: post.comments,
+      likes: post.likes,
+    };
   },
 });
 
@@ -161,13 +211,13 @@ export const getPostLikes = schemaComposer.createResolver<
   async resolve({ args }) {
     const { postId } = args?.data;
 
-    const post = await Post.findById(postId).populate('likes');
+    const likes = await Like.find({ post: postId });
 
-    if (!post) {
+    if (!likes) {
       throw new Error('Post not found');
     }
 
-    return { likes: post.likes, likeCount: post.likeCount }
+    return { likes, likeCount: likes.length };
   },
 });
 
@@ -187,12 +237,38 @@ export const getFeed = schemaComposer.createResolver<
   async resolve({ args }) {
     const { user: userId } = args?.data;
 
-    const user = await User.findById(userId);
+    const user = await User.findById(userId).populate('following');
 
     if (!user) {
       throw new Error(`User doesn't exist`);
     }
 
-    //  TODO FEED POSTS LOGIC
+    //  gets the user liked posts
+    const userLikes = await Like.find({ likedBy: userId });
+
+    const posts = await Post.aggregate([
+      {
+        $match: {
+          author: { $in: user.following },
+        },
+      },
+    ]);
+
+    if (!posts) {
+      throw new Error(`Posts do not exist`);
+    }
+
+    //  maps the ids of the users that the logged user follows
+    const followingIds = user.following.map((follow) => String(follow._id));
+
+    const userLikesIds = userLikes.map((like) => String(like.post));
+
+    const feed = posts.map((post) => {
+      const followIndex = followingIds.indexOf(String(post.author));
+      const isLiked = userLikesIds.includes(String(post._id));
+      return { post: { ...post }, user: user.following[followIndex], isLiked };
+    });
+
+    return { feed };
   },
 });

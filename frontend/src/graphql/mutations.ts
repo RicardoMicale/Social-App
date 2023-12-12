@@ -81,3 +81,21 @@ export const MODIFY_FOLLOW_REQUEST = gql`
     }
   }
 `;
+
+export const LIKE_POST = gql`
+  mutation LIKE_POST($data: CreateLikeInput) {
+    likePost(data: $data) {
+      _id
+    }
+  }
+`;
+
+//  COMMENTS
+
+export const CREATE_COMMENT = gql`
+  mutation CREATE_COMMENT($data: CreateCommentInput) {
+    createComment(data: $data) {
+      _id
+    }
+  }
+`;

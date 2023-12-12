@@ -69,7 +69,7 @@ const postSchema = new Schema(
 export const Post = model<PostDocument>('Post', postSchema);
 export const PostTC = composeMongoose(Post);
 
-PostTC.addRelation('user', {
+PostTC.addRelation('author', {
   resolver: () => UserTC.mongooseResolvers.dataLoader(),
   prepareArgs: {
     _id: (source) => source.author,
