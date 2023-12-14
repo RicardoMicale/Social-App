@@ -11,12 +11,15 @@ import PostItem from '../post/PostItem';
 import Link from 'next/link';
 import RequestIcon from '../icons/RequestIcon';
 import Loading from '../common/Loading';
+import EditIcon from '../icons/EditIcon';
+import { getImage } from '../../../firebase/storage';
 
 export default function MyProfile() {
   //  STATES
   const [user] = useUser();
   const [currentUser, setCurrentUser] = React.useState<User>({});
   const [posts, setPosts] = React.useState<Post[]>([]);
+  const [photo, setPhoto] = React.useState('');
 
   const { data, loading } = useQuery<{
     getUserPosts: { user: User; posts: Post[] };
@@ -47,6 +50,13 @@ export default function MyProfile() {
         >
           <RequestIcon className="h-5 w-5" />
           See follow requests
+        </Link>
+        <Link
+          href="/profile/edit"
+          className="border-2 border-indigo-600 bg-misc-white text-indigo-600 px-6 py-3 rounded-md flex items-center justify-center gap-4 hover:bg-slate-100 mt-4 cursor-pointer"
+        >
+          <EditIcon className="h-5 w-5" />
+          Edit profile
         </Link>
       </section>
       <section className="w-full md:w-3/5">

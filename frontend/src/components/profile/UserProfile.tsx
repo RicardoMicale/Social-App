@@ -6,9 +6,9 @@ import { Post, User } from '@/models';
 import { useQuery } from '@apollo/client';
 import { useParams } from 'next/navigation';
 import PostItem from '../post/PostItem';
-import AddIcon from '../icons/AddIcon';
 import UserCard from '../user/UserCard';
 import Loading from '../common/Loading';
+import { getImage } from '../../../firebase/storage';
 
 export default function UserProfile() {
   //  STATES

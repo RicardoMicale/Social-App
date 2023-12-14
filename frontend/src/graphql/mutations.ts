@@ -90,6 +90,19 @@ export const LIKE_POST = gql`
   }
 `;
 
+export const UPDATE_USER = gql`
+  mutation UPDATE_USER(
+    $record: UpdateOneUserInput!
+    $filter: FilterUpdateOneUserInput
+  ) {
+    updateUser(record: $record, filter: $filter) {
+      record {
+        _id
+      }
+    }
+  }
+`;
+
 //  COMMENTS
 
 export const CREATE_COMMENT = gql`

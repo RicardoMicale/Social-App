@@ -10,6 +10,7 @@ import LikeItem from './LikeItem';
 import CommentForm from '../comment/CommentForm';
 import CommentItem from '../comment/CommentItem';
 import Loading from '../common/Loading';
+import { useUser } from '@/hooks/useUser';
 
 export default function PostDetails() {
   //  STATES
@@ -19,6 +20,7 @@ export default function PostDetails() {
     comments?: Comment[];
     likes?: Like[];
   }>({});
+  const [user] = useUser();
   const params = useParams();
 
   //  QUERIES
@@ -40,6 +42,16 @@ export default function PostDetails() {
     }
   }, [data, loading]);
 
+  //  FUNCTIONS
+
+  const isLiked = () => {
+    if (post?.post?.likeCount === 0) return false;
+
+    const likes = post?.likes?.map((like) => like?.likedBy?._id);
+
+    return likes?.includes(user?._id);
+  };
+
   if (loading) {
     return <Loading />;
   }
@@ -47,7 +59,11 @@ export default function PostDetails() {
   return (
     <div className="py-16 flex items-start justify-start gap-4">
       <section className="w-full md:w-3/5 flex items-start justify-start flex-col gap-4">
-        <PostItem post={post?.post ?? {}} author={post?.user ?? {}} />
+        <PostItem
+          post={post?.post ?? {}}
+          author={post?.user ?? {}}
+          isLiked={isLiked()}
+        />
         <CommentForm />
         <div className="w-full">
           {post?.comments?.length ? (
